@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -19,10 +19,5 @@ import { ConfigService } from '@nestjs/config';
   controllers: [AuthController],
   providers: [AuthService, ConfigService],
 })
-export class AuthModule implements OnModuleInit {
-  constructor(private authService: AuthService) {}
 
-  async onModuleInit() {
-    await this.authService.seedUsers();
-  }
-}
+export class AuthModule {}
