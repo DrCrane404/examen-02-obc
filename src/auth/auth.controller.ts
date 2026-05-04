@@ -22,7 +22,7 @@ export class AuthController {
   @Post('/setup')
   setup(@Body() body: { secret: string; email: string; role: string }) {
     const secret= this.configService.get<string>('SETUP_SECRET');
-    if (body.secret !== process.env.SETUP_SECRET) {
+    if (body.secret !== secret) {
       throw new ForbiddenException('No autorizado');
     }
     return this.authService.setRole(body.email, body.role);
