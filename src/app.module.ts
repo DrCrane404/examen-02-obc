@@ -16,16 +16,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       ConfigModule.forRoot({
   isGlobal:true,
   }),
-    TypeOrmModule.forRoot({
-        type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'root',
-        password: '',
-        database: 'prueba_exa',
-        autoLoadEntities: true,
-        synchronize: true,
-    }),ProductoModule, CategoriesModule, OptionsModule, CustomersModule, OrdersModule, OrderDetailsModule, AuthModule],
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory:(config:ConfigService) =>({
+      type: 'mysql',
+      url: process.env.DATABASE_URL,
+      autoLoadEntities: true,
+      synchronize: true,
+      ssl: {rejectUnauthorized:false}
+    })
+  }),ProductoModule, CategoriesModule, OptionsModule, CustomersModule, OrdersModule, OrderDetailsModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

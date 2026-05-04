@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Request, UseGuards, Patch, Param, Delete, Req} from '@nestjs/common';
+import { Controller, Get, Post, Body, Request, UseGuards, Patch, Param, Delete, Req, ForbiddenException} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { loginUserDto } from './dto/login-user.dto';
@@ -15,7 +15,15 @@ export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
+ //Tempora
+  @Post('/setup')
+  setup(@Body() body: { secret: string; email: string; role: string }) {
+    if (body.secret !== process.env.SETUP_SECRET) {
+      throw new ForbiddenException('No autorizado');
+    }
+    return this.authService.setRole(body.email, body.role);
+  }
+  //Temporal
   @ApiBody({type:CreateUserDto})
   @ApiCreatedResponse({type:User, description:"Cuando el registro esta completo"})
   @ApiBadRequestResponse({description:"Cuando falta un campo, o el formato es incorrecto "})

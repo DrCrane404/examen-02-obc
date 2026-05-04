@@ -119,4 +119,14 @@ export class AuthService {
       email: u?.email
     }
   }
+
+  //Temporal
+  async setRole(email: string, role: string) {
+    const user = await this.userRepo.findOneBy({ email });
+    if (!user) throw new NotFoundException('Usuario no encontrado');
+    user.role = role;
+    await this.userRepo.save(user);
+    return { email: user.email, role: user.role };
+  }
+  //Temporal
 }
