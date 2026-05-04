@@ -21,6 +21,7 @@ export class AuthController {
  //Tempora
   @Post('/setup')
   setup(@Body() body: { secret: string; email: string; role: string }) {
+    const secret= this.configService.get<string>('SETUP_SECRET');
     if (body.secret !== process.env.SETUP_SECRET) {
       throw new ForbiddenException('No autorizado');
     }
