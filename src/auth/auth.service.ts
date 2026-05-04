@@ -121,12 +121,19 @@ export class AuthService {
   }
 
   //Temporal
-  async setRole(email: string, role: string) {
-    const user = await this.userRepo.findOneBy({ email });
-    if (!user) throw new NotFoundException('Usuario no encontrado');
-    user.role = role;
-    await this.userRepo.save(user);
-    return { email: user.email, role: user.role };
-  }
+  async seedUsers() {
+    const users = [
+      { name: 'Admin', email: 'admin@gmail.com', password: 'administrador234', role: 'admin' },
+      { name: 'Developer', email: 'dev@gmail.com', password: 'developer234', role: 'developer' },
+    ];
+
+    for (const u of users) {
+      const exists = await this.userRepo.findOneBy({ email: u.email });
+      if (!exists) {
+        const hash = await bcrypt.hash(u.password, 10);
+        await this.userRepo.save(this.userRepo.create({ ...u, password: hash }));
+      }
+    }
+}
   //Temporal
 }

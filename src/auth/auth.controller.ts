@@ -16,16 +16,8 @@ export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService){}
- //Tempora
-  @Post('/setup')
-  setup(@Body() body: { secret: string; email: string; role: string }) {
-    const secret= process.env['SETUP_SECRET'];
-    if (!secret || body.secret !== secret) {
-      throw new ForbiddenException('No autorizado');
-    }
-    return this.authService.setRole(body.email, body.role);
-  }
-  //Temporal
+ 
+  
   @ApiBody({type:CreateUserDto})
   @ApiCreatedResponse({type:User, description:"Cuando el registro esta completo"})
   @ApiBadRequestResponse({description:"Cuando falta un campo, o el formato es incorrecto "})
