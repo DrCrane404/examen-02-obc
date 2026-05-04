@@ -9,12 +9,15 @@ import { ResponseUserDto } from './dto/response-user.dto';
 import { SetMetadata } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiBearerAuth, ApiBody, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { ConfigService } from '@nestjs/config';
 export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService,
+    private readonly configService: ConfigService
+  ) {}
  //Tempora
   @Post('/setup')
   setup(@Body() body: { secret: string; email: string; role: string }) {
